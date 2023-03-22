@@ -28,7 +28,20 @@ app.get('/api/dishes', (req, res) => {
 });
 
 app.get('/api/dishes/:type', (req, res) => {
-  const dish = dishes.find((h) => h.type === parseInt(req.params.type));
+  const type = req.params.type;
+  const dish = dishes.find(
+    (n) =>
+      n.type.toLowerCase().includes(type.toLowerCase())  ||
+      n.province.toLowerCase().includes(type.toLowerCase()) ||
+      n.price === parseInt(type)
+  );
+  if (!dish)
+    return res.status(404).send('Record not found.');
+  res.send(dish);
+});
+
+app.get('/api/dishes/:province', (req, res) => {
+  const dish = dishes.find((h) => h.province === parseInt(req.params.province));
   if (!dish) return res.status(404).send('Record not found');
   res.send(dish);
 });
